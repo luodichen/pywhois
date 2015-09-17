@@ -53,6 +53,7 @@ class PyWhois(object):
                 if len(buf) > 0:
                     result += buf
                 else:
+                    s.close()
                     break
             
             ret = result
