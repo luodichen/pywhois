@@ -11,8 +11,9 @@ def main(argv):
         print 'Usage: %s <domain name>' % (argv[0], )
         exit(0)
         
-    result = PyWhois().getwhois(argv[1])
-    print result.decode('utf-8').encode(sys.stdin.encoding)
+    domain_name = argv[1].decode(sys.stdin.encoding).encode('utf-8')
+    result = PyWhois().getwhois(domain_name)
+    print result.decode('utf-8', 'replace').encode(sys.stdin.encoding, 'replace')
     
 if __name__ == '__main__':
     main(sys.argv)
