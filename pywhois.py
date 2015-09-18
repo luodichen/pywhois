@@ -10,13 +10,13 @@ import socket
 import xml.etree.ElementTree as et
 
 def current_file_directory():
-    path = os.path.realpath(sys.path[0])        # interpreter starter's path
-    if os.path.isfile(path):                    # starter is excutable file
+    path = os.path.realpath(sys.path[0])
+    if os.path.isfile(path):
         path = os.path.dirname(path)
-        return os.path.abspath(path)            # return excutable file's directory
-    else:                                       # starter is python script
-        caller_file = inspect.stack()[1][1]     # function caller's filename
-        return os.path.abspath(os.path.dirname(caller_file))# return function caller's file's directory
+        return os.path.abspath(path)
+    else:
+        caller_file = inspect.stack()[1][1]
+        return os.path.abspath(os.path.dirname(caller_file))
         
 class WhoisServerNotFoundError(Exception):
     pass
@@ -76,19 +76,6 @@ class PyWhois(object):
                 break
         
         return result
-    '''
-            ret = result
-            redirect = result.find('Domain names in the .com and .net domains '
-                                   + 'can now be registered\nwith many different '
-                                   + 'competing registrars. '
-                                   + 'Go to http://www.internic.net\nfor '
-                                   + 'detailed information.')
-            
-            match = re.search(r'^\s*Whois Server:\s+(.+)$', result, re.M)
-            server = None if match is None or redirect == -1 else match.groups()[0]
-        
-        return ret
-    '''
    
     def getwhois(self, domain_name):
         original_domain_name = domain_name
