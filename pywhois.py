@@ -5,15 +5,25 @@ Created on Sep 17, 2015
 '''
 
 import re
-import os
+import os, sys, inspect
 import socket
 import xml.etree.ElementTree as et
 
+def current_file_directory():
+    path = os.path.realpath(sys.path[0])        # interpreter starter's path
+    if os.path.isfile(path):                    # starter is excutable file
+        path = os.path.dirname(path)
+        return os.path.abspath(path)            # return excutable file's directory
+    else:                                       # starter is python script
+        caller_file = inspect.stack()[1][1]     # function caller's filename
+        return os.path.abspath(os.path.dirname(caller_file))# return function caller's file's directory
+        
 class WhoisServerNotFoundError(Exception):
     pass
 
 class ServerList(object):
-    def __init__(self, file_path = '.' + os.sep + 'whois-server-list.xml'):
+    def __init__(self, file_path=current_file_directory() \
+                 + os.sep + 'whois-server-list.xml'):
         self.dom_root = et.parse(file_path).getroot()
         
     def whois_server(self, domain_name):
