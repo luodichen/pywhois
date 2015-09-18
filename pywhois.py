@@ -45,7 +45,7 @@ class PyWhois(object):
         while server is not None:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((server, 43, ))
-            s.send(domain_name + '\n')
+            s.send(domain_name + '\r\n')
             
             result = ''
             while True:
@@ -57,8 +57,14 @@ class PyWhois(object):
                     break
             
             ret = result
+            redirect = result.find('Domain names in the .com and .net domains '
+                                   + 'can now be registered\nwith many different '
+                                   + 'competing registrars. '
+                                   + 'Go to http://www.internic.net\nfor '
+                                   + 'detailed information.')
+            
             match = re.search(r'^\s*Whois Server:\s+(.+)$', result, re.M)
-            server = None if match is None else match.groups()[0]
+            server = None if match is None or redirect == -1 else match.groups()[0]
         
         return ret
     
